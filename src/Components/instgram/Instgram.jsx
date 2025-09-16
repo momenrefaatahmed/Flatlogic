@@ -12,14 +12,24 @@ export default function Instagram() {
     <div>
       <div className="mt-5 mb-5">
         <h4 className="text-center mb-3 fw-bold">Follow us on Instagram</h4>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+            gap: "10px",
+          }}
+        >
           {instaGroup.map((e, index) => (
             <img
-              loading="lazy"
               key={index}
-              style={{ height: "275px", flex: "1" }}
               src={e}
               alt="insta"
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "cover",
+              }}
             />
           ))}
         </div>

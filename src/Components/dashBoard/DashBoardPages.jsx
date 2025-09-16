@@ -453,55 +453,65 @@ function DashboardProducts() {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
-              <tr
-                key={product.id}
-                style={{
-                  background: "white",
-                  boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                }}
-              >
-                <td>
-                  <img
-                    loading="lazy"
-                    style={{ height: "75px", width: "75px" }}
-                    src={product.image}
-                    alt=""
-                  />
-                </td>
-                <td>{product.title}</td>
-                <td>{product.price}</td>
-                <td>{product.categories}</td>
-                <td>
-                  <Button
-                    as={Link}
-                    to={`/dashboard/edit/${product.firebaseKey}`}
-                    className="bg-primary me-3"
-                    style={{
-                      color: "white",
-                      padding: "3px 10px",
-                      border: "none",
-                    }}
-                  >
-                    edit
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setSelectedProduct(product);
-                      setModalShow(true);
-                    }}
-                    className="bg-danger"
-                    style={{
-                      color: "white",
-                      padding: "3px 10px",
-                      border: "none",
-                    }}
-                  >
-                    delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {products
+              .filter(
+                (product) =>
+                  product &&
+                  (product.id || product.firebaseKey) &&
+                  (product.title || product.name) &&
+                  product.image
+              )
+              .map((product) => (
+                <tr
+                  key={product.id || product.firebaseKey}
+                  style={{
+                    background: "white",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <td>
+                    <img
+                      loading="lazy"
+                      style={{ height: "75px", width: "75px" }}
+                      src={product.image}
+                      alt={product.title || "Untitled"}
+                    />
+                  </td>
+                  <td>{product.title || product.name || "Untitled"}</td>
+                  <td>{product.price || 0}</td>
+                  <td>{product.categories || "N/A"}</td>
+                  <td>
+                    <Button
+                      as={Link}
+                      to={`/dashboard/edit/${
+                        product.firebaseKey || product.id
+                      }`}
+                      className="bg-primary me-3"
+                      style={{
+                        color: "white",
+                        padding: "3px 10px",
+                        border: "none",
+                      }}
+                    >
+                      edit
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setSelectedProduct(product);
+                        setModalShow(true);
+                      }}
+                      className="bg-danger"
+                      style={{
+                        color: "white",
+                        padding: "3px 10px",
+                        border: "none",
+                      }}
+                    >
+                      delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -593,7 +603,6 @@ function DashboardNewProduct() {
     try {
       let imageUrl = "";
 
-      // ✅ رفع الصورة على Cloudinary
       if (image) {
         const formData = new FormData();
         formData.append("file", image);
@@ -612,7 +621,6 @@ function DashboardNewProduct() {
         imageUrl = data.secure_url;
       }
 
-      // ✅ تجهيز المنتج الجديد
       const newProduct = {
         brands: brandes,
         categories,
@@ -631,7 +639,6 @@ function DashboardNewProduct() {
         ],
       };
 
-      // ✅ حفظ المنتج في Realtime Database
       const response = await fetch(
         "https://dream-store-f5025-default-rtdb.firebaseio.com/products.json",
         {
@@ -645,19 +652,17 @@ function DashboardNewProduct() {
         throw new Error("❌ فشل في حفظ المنتج");
       }
 
-      // ✅ تحديث الواجهة
       setProducts((prev) => [...prev, newProduct]);
 
-      console.log("✅ تم الحفظ:", newProduct);
+      showNotification("✅ Saved:", newProduct);
 
-      // ✅ Reset form
       setTitle("");
       setPrice("");
       setCategories("");
       setBrandes("");
       setImage(null);
     } catch (err) {
-      showNotification("خطأ في الحفظ:", err);
+      showNotification("Save error:", err);
     }
   };
 
@@ -679,6 +684,7 @@ function DashboardNewProduct() {
         {image && (
           <div style={{ marginTop: "15px" }}>
             <img
+              className="mb-3"
               loading="lazy"
               src={image instanceof File ? URL.createObjectURL(image) : ""}
               alt="preview"
@@ -793,16 +799,17 @@ export default function DashboardEditProduct() {
         );
 
         const foundProduct = res.data;
-        setProduct(foundProduct);
 
         if (foundProduct) {
+          setProduct(foundProduct);
+
           setTitle(foundProduct.title || "");
           setPrice(foundProduct.price || "");
-          setCategories(foundProduct.categories || "");
-          setBrands(foundProduct.brands || "");
+          setCategories(foundProduct.categories || foundProduct.category || "");
+          setBrands(foundProduct.brands || foundProduct.brand || "");
         }
       } catch (err) {
-        showNotification("❌ Error fetching product:", err);
+        showNotification("❌ Error fetching product: " + err.message);
       }
     }
 
@@ -825,7 +832,7 @@ export default function DashboardEditProduct() {
       );
       showNotification("✅ Product updated successfully!");
     } catch (err) {
-      showNotification("❌ Error updating product:", err);
+      showNotification("❌ Error updating product: " + err.message);
     }
   };
 

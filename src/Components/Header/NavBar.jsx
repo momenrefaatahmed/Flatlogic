@@ -88,9 +88,9 @@ export default function NavBar() {
                 onClick={() => setDrawerOpen(true)}
               />
             </div>
-            <a href="#" style={{ fontSize: "16px", fontWeight: "bold" }}>
+            <Link to="/" style={{ fontSize: "16px", fontWeight: "bold" }}>
               Flatlogic
-            </a>
+            </Link>
             <div
               className={"menu"}
               style={{ display: isMobile ? "none" : "flex" }}

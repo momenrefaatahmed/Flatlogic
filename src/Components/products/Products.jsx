@@ -62,132 +62,139 @@ export default function Products() {
             : "repeat(auto-fill, minmax(267px, 1fr))",
         }}
       >
-        {products.map((product) => {
-          return (
-            <div
-              onMouseEnter={() => handleProductHover(product.id)}
-              onMouseLeave={handleProductLeave}
-              key={product.firebaseKey || product.id} // 🔑 استخدام firebaseKey أو id
-              style={{
-                flexBasis: isMobile ? "100%" : "267px",
-                overflowX: "hidden",
-                padding: "20px",
-                marginBottom: "20px",
-              }}
-            >
+        {products
+          .filter((product) => product && product.title && product.image) // ✅ يمنع المنتجات الفاضية
+          .map((product) => {
+            return (
               <div
-                style={{ position: "relative", width: "100%", height: "auto" }}
+                onMouseEnter={() => handleProductHover(product.id)}
+                onMouseLeave={handleProductLeave}
+                key={product.firebaseKey || product.id}
+                style={{
+                  flexBasis: isMobile ? "100%" : "267px",
+                  overflowX: "hidden",
+                  padding: "20px",
+                  marginBottom: "20px",
+                }}
               >
-                <Link to={`/ActiveProduct/${product.id}`} state={{ product }}>
-                  <img
-                    src={product.image || "https://via.placeholder.com/267"} // 🔑 fallback
-                    alt={product.title} // 🔑 كان مكتوب name
-                    loading="lazy"
-                    style={{
-                      width: "100%",
-                      display: "block",
-                      transition: "transform 0.4s ease",
-                      transform:
-                        hoveredProduct === product.id
-                          ? "scale(1.05)"
-                          : "scale(1)",
-                    }}
-                  />
-                </Link>
-
-                {/* Hover Icons */}
                 <div
                   style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "8px",
-                    borderRadius: "8px",
-                    opacity: hoveredProduct === product.id ? 1 : 0,
-                    transition: "opacity 0.3s ease-in-out",
+                    position: "relative",
+                    width: "100%",
+                    height: "auto",
                   }}
                 >
-                  {/* Wishlist */}
-                  <FavoriteBorderIcon
-                    onMouseEnter={() =>
-                      handleIconsHover(product.id, "favorite")
-                    }
-                    onClick={() => {
-                      addToWishlist(product);
-                      showNotification("Added to wishlist!", "success");
-                    }}
-                    onMouseLeave={handleIconsLeave}
-                    style={{
-                      color:
-                        iconsHover.productId === product.id &&
-                        iconsHover.icon === "favorite"
-                          ? "#bd744c"
-                          : "black",
-                      cursor: "pointer",
-                    }}
-                  />
+                  <Link to={`/ActiveProduct/${product.id}`} state={{ product }}>
+                    <img
+                      src={product.image || "https://via.placeholder.com/267"} // 🔑 fallback
+                      alt={product.title} // 🔑 كان مكتوب name
+                      loading="lazy"
+                      style={{
+                        width: "100%",
+                        display: "block",
+                        transition: "transform 0.4s ease",
+                        transform:
+                          hoveredProduct === product.id
+                            ? "scale(1.05)"
+                            : "scale(1)",
+                      }}
+                    />
+                  </Link>
 
-                  {/* Zoom / Modal */}
-                  <ZoomInIcon
-                    onMouseEnter={() => handleIconsHover(product.id, "zoom")}
-                    onMouseLeave={handleIconsLeave}
-                    onClick={() => {
-                      setModalShow(true);
-                      setSelectedProduct(product);
-                    }}
+                  {/* Hover Icons */}
+                  <div
                     style={{
-                      color:
-                        iconsHover.productId === product.id &&
-                        iconsHover.icon === "zoom"
-                          ? "#bd744c"
-                          : "black",
-                      cursor: "pointer",
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "8px",
+                      borderRadius: "8px",
+                      opacity: hoveredProduct === product.id ? 1 : 0,
+                      transition: "opacity 0.3s ease-in-out",
                     }}
-                  />
+                  >
+                    {/* Wishlist */}
+                    <FavoriteBorderIcon
+                      onMouseEnter={() =>
+                        handleIconsHover(product.id, "favorite")
+                      }
+                      onClick={() => {
+                        addToWishlist(product);
+                        showNotification("Added to wishlist!", "success");
+                      }}
+                      onMouseLeave={handleIconsLeave}
+                      style={{
+                        color:
+                          iconsHover.productId === product.id &&
+                          iconsHover.icon === "favorite"
+                            ? "#bd744c"
+                            : "black",
+                        cursor: "pointer",
+                      }}
+                    />
 
-                  {/* Add to Cart */}
-                  <AddShoppingCartIcon
-                    onMouseEnter={() => handleIconsHover(product.id, "cart")}
-                    onMouseLeave={handleIconsLeave}
-                    onClick={() => {
-                      addToCart(product);
-                      showNotification("Added To Cart!", "success");
-                    }}
+                    {/* Zoom / Modal */}
+                    <ZoomInIcon
+                      onMouseEnter={() => handleIconsHover(product.id, "zoom")}
+                      onMouseLeave={handleIconsLeave}
+                      onClick={() => {
+                        setModalShow(true);
+                        setSelectedProduct(product);
+                      }}
+                      style={{
+                        color:
+                          iconsHover.productId === product.id &&
+                          iconsHover.icon === "zoom"
+                            ? "#bd744c"
+                            : "black",
+                        cursor: "pointer",
+                      }}
+                    />
+
+                    {/* Add to Cart */}
+                    <AddShoppingCartIcon
+                      onMouseEnter={() => handleIconsHover(product.id, "cart")}
+                      onMouseLeave={handleIconsLeave}
+                      onClick={() => {
+                        addToCart(product);
+                        showNotification("Added To Cart!", "success");
+                      }}
+                      style={{
+                        color:
+                          iconsHover.productId === product.id &&
+                          iconsHover.icon === "cart"
+                            ? "#bd744c"
+                            : "black",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Product Info */}
+                <div>
+                  <p style={{ marginTop: "10px", marginBottom: "5px" }}>
+                    {product.categories}
+                  </p>
+                  <h3
                     style={{
                       color:
-                        iconsHover.productId === product.id &&
-                        iconsHover.icon === "cart"
-                          ? "#bd744c"
-                          : "black",
-                      cursor: "pointer",
+                        hoveredProduct === product.id ? "#bd744c" : "black",
+                      fontSize: "18px",
+                      fontWeight: "bold",
                     }}
-                  />
+                  >
+                    {product.title}
+                  </h3>
+                  <span>${product.price}</span>
                 </div>
               </div>
-
-              {/* Product Info */}
-              <div>
-                <p style={{ marginTop: "10px", marginBottom: "5px" }}>
-                  {product.categories}
-                </p>
-                <h3
-                  style={{
-                    color: hoveredProduct === product.id ? "#bd744c" : "black",
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {product.title}
-                </h3>
-                <span>${product.price}</span>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
 
       {/* Products Modal */}

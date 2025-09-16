@@ -23,20 +23,6 @@ export default function MyVerticallyCenteredModal(props) {
   const { addToCart } = useContext(CartContext);
   const { showNotification } = useContext(NotificationContext);
 
-  const value = 3.5;
-  const labels = {
-    0.5: "Useless",
-    1: "Useless+",
-    1.5: "Poor",
-    2: "Poor+",
-    2.5: "Ok",
-    3: "Ok+",
-    3.5: "Good",
-    4: "Good+",
-    4.5: "Excellent",
-    5: "Excellent+",
-  };
-
   useEffect(() => {
     if (product?.price) {
       setUnitPrice(product.price);
@@ -68,12 +54,27 @@ export default function MyVerticallyCenteredModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Container>
-        <Row style={{ padding: "0" }}>
-          <Col className="p-0" xs={6} style={{}}>
-            <img className="w-100 h-100 " src={product?.image || "No Image"} />
+      <Container fluid>
+        <Row>
+          {/* الصورة */}
+          <Col
+            xs={12}
+            md={6}
+            className="p-0 d-flex justify-content-center align-items-center"
+          >
+            <img
+              className="w-100"
+              style={{
+                maxHeight: "300px",
+                objectFit: "contain",
+              }}
+              src={product?.image || "No Image"}
+              alt={product?.title}
+            />
           </Col>
-          <Col className="p-4" xs={6} style={{}}>
+
+          {/* التفاصيل */}
+          <Col xs={12} md={6} className="p-4">
             <a
               style={{
                 color: "#bd744c",
@@ -87,25 +88,28 @@ export default function MyVerticallyCenteredModal(props) {
             </a>
             <p>{product?.categories || "No categories"}</p>
             <h2 className="mb-2">{product?.title || "No Name"}</h2>
+
             <Box sx={{ width: 200, display: "flex", alignItems: "center" }}>
               <Rating
                 name="text-feedback"
-                value={value}
+                value={3.5}
                 readOnly
                 precision={0.5}
                 emptyIcon={
                   <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
                 }
               />
-              <Box sx={{ ml: 2 }}>{labels[value]}</Box>
+              <Box sx={{ ml: 2 }}>Good</Box>
             </Box>
-            <p>
+
+            <p style={{ fontSize: "14px" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ut
               ullamcorper leo, eget euismod orci. Cum sociis natoque penatibus
-              et magnis dis parturient montes, nascetur ridiculus mus.
-              Vestibulum ultricies aliquam.
+              et magnis dis parturient montes.
             </p>
-            <div className="d-flex" style={{ gap: "20px" }}>
+
+            <div className="d-flex flex-wrap" style={{ gap: "20px" }}>
+              {/* الكمية */}
               <div>
                 <h6>Quantity</h6>
                 <div className="d-flex align-items-center">
@@ -123,16 +127,17 @@ export default function MyVerticallyCenteredModal(props) {
                   </span>
                 </div>
               </div>
+
+              {/* السعر */}
               <div>
                 <h6>Price</h6>
-                <div className="d-flex align-items-center">
-                  <span style={{ fontSize: "20px" }}>${price || "None"}</span>
-                </div>
+                <span style={{ fontSize: "20px" }}>${price || "None"}</span>
               </div>
             </div>
-            <div className="mt-4 d-flex" style={{ gap: "15px" }}>
+
+            <div className="mt-4 d-flex flex-wrap" style={{ gap: "15px" }}>
               <button
-                className="btn-home"
+                className="btn-home flex-grow-1"
                 onClick={() => {
                   addToCart(product, quantity);
                   showNotification("Added To Cart!", "success");
@@ -140,7 +145,10 @@ export default function MyVerticallyCenteredModal(props) {
               >
                 ADD TO CART
               </button>
-              <button className="btn-home" style={{ padding: "15px 20px" }}>
+              <button
+                className="btn-home flex-grow-1"
+                style={{ padding: "15px 20px" }}
+              >
                 BUY NOW
               </button>
             </div>

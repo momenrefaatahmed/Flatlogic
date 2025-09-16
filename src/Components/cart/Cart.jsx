@@ -58,7 +58,7 @@ export default function Cart() {
       <Container>
         <div className="mt-5" style={{ marginBottom: "52px" }}>
           <Row>
-            <Col xs={8}>
+            <Col xs={12} md={8}>
               <h3 className="fw-bold mb-5 p-4">Shopping Cart</h3>
               {cart.length === 0 ? (
                 <p>No Items</p>
@@ -82,7 +82,7 @@ export default function Cart() {
                     {cart.map((item) => (
                       <tr key={item.id}>
                         <td>
-                          <div className="d-flex align-items-center">
+                          <div className="d-flex align-items-center flex-column flex-md-row text-center text-md-start">
                             <img
                               loading="lazy"
                               src={item.image}
@@ -92,10 +92,10 @@ export default function Cart() {
                                 width: "80px",
                                 objectFit: "cover",
                               }}
-                              className="me-3 rounded"
+                              className="me-md-3 mb-2 mb-md-0 rounded"
                             />
                             <div>
-                              <p className="mb-1 " style={{ fontSize: "14px" }}>
+                              <p className="mb-1" style={{ fontSize: "14px" }}>
                                 {item.title}
                               </p>
                             </div>
@@ -135,7 +135,7 @@ export default function Cart() {
                 </table>
               )}
             </Col>
-            <Col xs={4} style={{ backgroundColor: "#f5f5f5" }}>
+            <Col xs={12} md={4} style={{ backgroundColor: "#f5f5f5" }}>
               <div className="p-4">
                 <h3 className="fw-bold mb-5">Cart Total</h3>
                 <div className="pb-3 border-bottom">

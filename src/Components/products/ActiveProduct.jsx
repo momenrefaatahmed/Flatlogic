@@ -321,7 +321,7 @@ export default function ActiveProduct() {
           show={modalShow}
           onHide={() => {
             setModalShow(false);
-            fetchFeedback(); 
+            fetchFeedback();
           }}
           product={selectedProduct}
         />

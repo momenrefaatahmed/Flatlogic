@@ -35,35 +35,40 @@ export default function Swipe() {
               },
             }}
           >
-            {products.map((product) => {
-              const id = product.id || product.firebaseKey;
-              const image =
-                product.image ||
-                "https://via.placeholder.com/300x200?text=No+Image";
-              const title = product.title || product.name || "Untitled";
-              const category = product.category || product.categories || "";
-              const price = product.price || 0;
+            {products
+              .filter(
+                (product) =>
+                  product && (product.title || product.name) && product.image
+              )
+              .map((product) => {
+                const id = product.id || product.firebaseKey;
+                const image =
+                  product.image ||
+                  "https://via.placeholder.com/300x200?text=No+Image";
+                const title = product.title || product.name || "Untitled";
+                const category = product.category || product.categories || "";
+                const price = product.price || 0;
 
-              return (
-                <SwiperSlide key={id}>
-                  <Link to="/ActiveProduct" state={{ product }}>
-                    <div>
-                      <img
-                        loading="lazy"
-                        className="w-100"
-                        src={image}
-                        alt={title}
-                      />
-                    </div>
-                    <div>
-                      <p className="mb-1">{category}</p>
-                      <h5 className="mb-1">{title}</h5>
-                      <span>${price}</span>
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              );
-            })}
+                return (
+                  <SwiperSlide key={id}>
+                    <Link to={`/ActiveProduct/${id}`} state={{ product }}>
+                      <div>
+                        <img
+                          loading="lazy"
+                          className="w-100"
+                          src={image}
+                          alt={title}
+                        />
+                      </div>
+                      <div>
+                        <p className="mb-1">{category}</p>
+                        <h5 className="mb-1">{title}</h5>
+                        <span>${price}</span>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                );
+              })}
           </Swiper>
         </div>
       </div>

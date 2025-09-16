@@ -10,16 +10,14 @@ import axios from "axios";
 import { NotificationContext } from "../../Context/NotificationContext";
 
 export default function MyVerticallyCenteredModal(props) {
-  const { product, onHide } = props; // جاي من فوق
+  const { product, onHide } = props;
   const [value, setValue] = useState(2);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [comment, setComment] = useState("");
   const { showNotification } = useContext(NotificationContext);
 
-  // const [parsonImage, setParsonImage] = useState(null);
-
-  function handleFeadbBackClick() {
+  function handleFeedbackClick() {
     const newFeedback = {
       firstName,
       lastName,
@@ -27,17 +25,16 @@ export default function MyVerticallyCenteredModal(props) {
       rating: value,
     };
 
-    // نفترض ان المنتجات في firebase متخزنة كـ array
     const productIndex = product.id - 1;
 
     axios
       .post(
-        `https://dream-store-f5025-default-rtdb.firebaseio.com/data/products/response/${productIndex}/feadBack.json`,
+        `https://dream-store-f5025-default-rtdb.firebaseio.com/data/products/response/${productIndex}/feedback.json`,
         newFeedback
       )
       .then((res) => {
         console.log("✅ Feedback added:", res.data);
-        onHide(); // نقفل المودال بعد الحفظ
+        onHide();
       })
       .catch((err) => {
         console.error("❌ Error:", err);
@@ -58,6 +55,7 @@ export default function MyVerticallyCenteredModal(props) {
           <img
             style={{ height: "100px", marginRight: "15px" }}
             src={product?.image}
+            alt={product?.title}
           />
           <div>
             <p>{product?.title}</p>
@@ -80,23 +78,17 @@ export default function MyVerticallyCenteredModal(props) {
             <div className="mb-3" style={{ display: "flex", gap: "15px" }}>
               <TextField
                 className="w-100"
-                id="outlined-basic"
                 label="First Name"
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
+                onChange={(e) => setFirstName(e.target.value)}
                 variant="outlined"
                 type="text"
                 value={firstName}
               />
               <TextField
                 className="w-100"
-                id="outlined-basic"
                 label="Last Name"
                 value={lastName}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
+                onChange={(e) => setLastName(e.target.value)}
                 variant="outlined"
                 type="text"
               />
@@ -108,22 +100,9 @@ export default function MyVerticallyCenteredModal(props) {
                   placeholder="Leave a comment here"
                   style={{ height: "100px" }}
                   value={comment}
-                  onChange={(e) => {
-                    setComment(e.target.value);
-                  }}
+                  onChange={(e) => setComment(e.target.value)}
                 />
               </FloatingLabel>
-            </div>
-            <div>
-              <Form.Label>Upload Image</Form.Label>
-              <Form.Control
-                type="file"
-                name="file"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setParsonImage(file);
-                }}
-              />
             </div>
           </form>
           <div className="w-100 d-flex justify-content-center align-items-center">
@@ -141,7 +120,7 @@ export default function MyVerticallyCenteredModal(props) {
                 fontWeight: "bold",
               }}
               onClick={() => {
-                handleFeadbBackClick();
+                handleFeedbackClick();
                 showNotification("Feedback Submitted!", "success");
               }}
             >
