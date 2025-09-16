@@ -3,7 +3,7 @@
 🚀 A fully responsive **E-commerce web app** built with **React.js (Vite)** and powered by **Firebase** as backend.  
 This project demonstrates frontend + backend integration, role-based authorization, and a modern admin dashboard.  
 
-🔗 **Live Demo**: [https://your-deployed-link.com]([https://your-deployed-link.com](https://coruscating-llama-31cb88.netlify.app/))  
+🔗 **Live Demo**: [https://coruscating-llama-31cb88.netlify.app/)  
 💻 **GitHub Repo**: [Cloth Store](https://github.com/momenrefaatahmed/Flatlogic)
 
 ---
