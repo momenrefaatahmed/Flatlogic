@@ -1,4 +1,4 @@
-# 🛍️ Cloth Store - E-commerce Web Application
+# 🛍️ Flatlogic - E-commerce Web Application
 
 🚀 A fully responsive **E-commerce web app** built with **React.js (Vite)** and powered by **Firebase** as backend.  
 This project demonstrates frontend + backend integration, role-based authorization, and a modern admin dashboard.  
